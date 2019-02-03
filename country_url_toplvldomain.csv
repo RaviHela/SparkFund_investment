@@ -1,0 +1,253 @@
+top_lvl_domain,country_name,code
+so,Somalia,SOM
+nc,New Caledonia,NCL
+mm,Myanmar,MMR
+zw,Zimbabwe,ZWE
+zm,Zambia,ZMB
+za ,South Africa,ZAF
+yt,Mayotte,MYT
+ye,Yemen,YEM
+ws ,Samoa,WSM
+wf,Wallis and Futuna,WLF
+vu,Vanuatu,VUT
+vn,Vietnam,VNM
+vi,United States Virgin Islands,
+vg,British Virgin Islands,VGB
+ve,Venezuela,VEN
+vc,Saint Vincent and the Grenadines,VCT
+va,Vatican City,
+uz,Uzbekistan,UZB
+uy,Uruguay,URY
+us,United States of America (USA),USA
+uk,United Kingdom (UK),GBR
+ug,Uganda,UGA
+ua ,Ukraine,UKR
+tz,Tanzania,TZA
+tw,Taiwan,TWN
+tv,Tuvalu,TUV
+tt,Trinidad & Tobago,
+tr,Turkey,TUR
+to,Tonga,TON
+tn,Tunisia,TUN
+tm,Turkmenistan,TKM
+tl ,East Timor (Timor-Leste),
+tk,Tokelau,TKL
+tj,Tajikistan,TJK
+th,Thailand,THA
+tg,Togo,TGO
+tf ,French Southern and Antarctic Lands,
+td ,Chad,TCD
+tc,Turks and Caicos Islands,TCA
+sz,Swaziland,SWZ
+sy,Syria,SYR
+sx,Sint Maarten,SXM
+sv,El Salvador,SLV
+st,São Tomé and Príncipe,
+ss,South Sudan,SSD
+sr,Suriname,SUR
+sn,Senegal,SEN
+sm,San Marino,SMR
+sl,Sierra Leone,SLE
+sk,Slovakia,SVK
+sj,Svalbard and Jan Mayen Islands,
+si,Slovenia,SVN
+sh,Saint Helena,SHN
+sg,Singapore,SGP
+se,Sweden,SWE
+sd,Sudan,SDN
+sc,Seychelles,SYC
+sb ,Solomon Islands,SLB
+sa,Saudi Arabia,SAU
+rw,Rwanda,RWA
+ru,Russia,RUS
+rs ,Serbia,SRB
+ro,Romania,ROU
+re,Réunion Island,
+qa,Qatar,QAT
+py,Paraguay,PRY
+pw ,Palau,PLW
+pt,Portugal,PRT
+ps ,Gaza Strip (Gaza),
+ps,Palestine,
+pr,Puerto Rico,PRI
+pn,Pitcairn Islands,
+pm,Saint-Pierre and Miquelon,
+pl,Poland,POL
+pk,Pakistan,PAK
+ph,Philippines,PHL
+pg,Papua New Guinea,PNG
+pf ,French Polynesia,PYF
+pe,Peru,PER
+pa,Panama,PAN
+om,Oman,OMN
+nz,New Zealand,NZL
+nu,Niue,NIU
+nr,Nauru,NRU
+np,Nepal,NPL
+no,Norway,NOR
+nl,Netherlands,NLD
+ni,Nicaragua,NIC
+ng,Nigeria,NGA
+nf,Norfolk Island,NFK
+ne,Niger,NER
+na,Namibia,NAM
+mz,Mozambique,MOZ
+my,Malaysia,MYS
+mx,Mexico,MEX
+mw,Malawi,MWI
+mv,Maldives,MDV
+mu,Mauritius,MUS
+mt,Malta,MLT
+ms,Montserrat,MSR
+mr,Mauritania,MRT
+mq,Martinique,MTQ
+mp,Northern Mariana Islands,MNP
+mo ,Macau,
+mn,Mongolia,MNG
+ml,Mali,MLI
+mh,Marshall Islands,MHL
+mg,Madagascar,MDG
+mf ,Saint Martin (officially the Collectivity of Saint Martin),
+me,Montenegro,MNE
+md,Moldova,MDA
+mc,Monaco,MCO
+ma ,Morocco,MAR
+ly,Libya,LBY
+lv,Latvia,LVA
+lu,Luxembourg,LUX
+lt,Lithuania,LTU
+ls,Lesotho,LSO
+lr,Liberia,LBR
+lk,Sri Lanka,LKA
+li,Liechtenstein,LIE
+lc,Saint Lucia,LCA
+lb,Lebanon,LBN
+la,Laos,LAO
+kz,Kazakhstan,KAZ
+ky,Cayman Islands,CYM
+kw,Kuwait,KWT
+kr,South Korea,KOR
+kp ,North Korea,PRK
+kn,Saint Kitts and Nevis,KNA
+km ,Comoros,COM
+ki,Kiribati,KIR
+kh ,Cambodia,KHM
+kg,Kyrgyzstan,KGZ
+ke,Kenya,KEN
+jp,Japan,JPN
+jo,Jordan,JOR
+jm,Jamaica,JAM
+je,Jersey,JEY
+it,Italy,ITA
+is ,Iceland,ISL
+ir,Iran,IRN
+iq,Iraq,IRQ
+io,British Indian Ocean Territory,IOT
+in,India,IND
+im,Isle of Man,IMN
+il,Israel,ISR
+ie,Ireland,IRL
+id,Indonesia,IDN
+hu,Hungary,HUN
+ht,Haiti,HTI
+hr ,Croatia,HRV
+hn,Honduras,HND
+hm,Heard Island and McDonald Islands,HMD
+hk,Hong Kong,HKG
+gy,Guyana,GUY
+gw,Guinea-Bissau,GNB
+gu,Guam,GUM
+gt,Guatemala,GTM
+gs,South Georgia and the South Sandwich Islands,SGS
+gr,Greece,GRC
+gq ,Equatorial Guinea,GNQ
+gp,Guadeloupe,GLP
+gn,Guinea,GIN
+gm,Gambia,GMB
+gl,Greenland,GRL
+gi,Gibraltar,GIB
+gh,Ghana,GHA
+gg,Guernsey,GGY
+gf ,French Guiana,GUF
+ge,Georgia,GEO
+gd,Grenada,GRD
+gal,Galicia,
+ga,Gabon (officially: Gabonese Republic),
+fr,France,FRA
+fo ,Faeroe Islands,
+fm,Federated States of Micronesia,
+fk,Falkland Islands,FLK
+fj,Fiji,FJI
+fi,Finland,FIN
+eus,Basque Country,
+eu,European Union,
+et,Ethiopia,ETH
+es ,Spain,ESP
+er ,Eritrea,ERI
+eh,Western Sahara,ESH
+eg,Egypt,EGY
+ee ,Estonia,EST
+ec,Ecuador,ECU
+dz ,Algeria,DZA
+do,Dominican Republic,DOM
+dm,Dominica,DMA
+dk,Denmark,DNK
+dj,Djibouti,DJI
+de ,Germany,DEU
+cz,Czechia (Czech Republic),
+cy,Cyprus,CYP
+cx,Christmas Island,CXR
+cw,Curaçao,
+cv,Cape Verde (in Portuguese: Cabo Verde),
+cu,Cuba,CUB
+cr,Costa Rica,CRI
+co,Colombia,COL
+cn,"China, People’s Republic of",CHN
+cm,Cameroon,CMR
+cl,Chile,CHL
+ck,Cook Islands,COK
+ci,Côte d’Ivoire (Ivory Coast),
+ch,Switzerland,CHE
+cg,"Congo, Republic of the (Congo-Brazzaville)",
+cf,Central African Republic,CAF
+cd,"Congo, Democratic Republic of the (Congo-Kinshasa)",
+cc,Cocos (Keeling) Islands,
+cat,Catalonia,
+ca,Canada,CAN
+bz,Belize,BLZ
+by ,Belarus,BLR
+bw,Botswana,BWA
+bv,Bouvet Island,BVT
+bt,Bhutan,BTN
+bs,Bahamas,BHS
+br,Brazil,BRA
+bo,Bolivia,BOL
+bn,Brunei,BRN
+bm,Bermuda,BMU
+bl ,Saint Barthélemy (informally also referred to as Saint Barth’s or Saint Barts),
+bj,Benin,BEN
+bi,Burundi,BDI
+bh,Bahrain,BHR
+bg,Bulgaria,BGR
+bf,Burkina Faso,BFA
+be,Belgium,BEL
+bd,Bangladesh,BGD
+bb,Barbados,BRB
+ba,Bosnia and Herzegovina,BIH
+az,Azerbaijan,AZE
+ax,Åland,
+aw ,Aruba,ABW
+au,Australia,AUS
+at,Austria,AUT
+as,American Samoa,ASM
+ar,Argentina,ARG
+aq ,Antarctica,ATA
+ao,Angola,AGO
+am,Armenia,ARM
+al,Albania,ALB
+ai,Anguilla,AIA
+ag,Antigua and Barbuda,ATG
+af,Afghanistan,AFG
+ae,United Arab Emirates (UAE),UAE
+ad,Andorra,AND
+ac,Ascension Island,

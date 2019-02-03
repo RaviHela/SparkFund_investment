@@ -1,0 +1,373 @@
+---
+title: "investment_spark"
+author: "Ravi Hela"
+date: "15 January 2019"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+
+#Load libraries
+```{r}
+library(readr)
+library(tidyverse)
+library(lubridate)
+library(gridExtra)
+library(stringi)
+library(stringr)
+```
+
+#read files
+```{r}
+
+companies <- read_delim("C:/Users/Rabi/Documents/Data_Science/upgrad/investment_case_study/companies.txt", delim = "\t")
+
+#reading the col raised_amoun_usd in character to avoid error of treating few items as exception.
+rounds2 <- read_csv("C:/Users/Rabi/Documents/Data_Science/upgrad/investment_case_study/rounds2.csv", col_types = cols(raised_amount_usd = col_character()))
+```
+##EDA and Preprocessing of dataset rounds2
+
+
+```{r}
+# glimpse(rounds2)
+# head(rounds2)
+# DataExplorer::plot_intro(rounds2)
+# summary(rounds2)
+#converting amount raised USD to numeric, converting funding at to date
+rounds2$raised_amount_usd <- (as.numeric(rounds2$raised_amount_usd))/(10^6)
+rounds2$funded_at <- dmy(rounds2$funded_at)
+#checking character variables for candidate factor variable.
+#sapply(sapply(rounds2, unique), length)
+#funding_round_type and funding_round_code can be converted to factors.
+rounds2$funding_round_type <- as.factor(rounds2$funding_round_type)
+rounds2$funding_round_code  <- as.factor(rounds2$funding_round_code)
+#explore missingness
+# DataExplorer::plot_missing(rounds2)
+#dropping funding round code as more than 70% of the data is missing
+rounds2$funding_round_code <- NULL
+DataExplorer::plot_missing(rounds2)
+# summary(rounds2)
+#DataExplorer::plot_histogram(rounds2)
+#checking what % of invested amout cells are missing
+sum(is.na(rounds2$raised_amount_usd))/nrow(rounds2)
+#17% of the rows are missing raised_amount_usd. ets check few of them
+#rounds2 %>% filter(is.na(raised_amount_usd)) %>% head(20)
+#lets explore if missingness has any relationship with funding type:
+rounds2 %>% 
+  mutate(raised_fund_available = if_else(is.na(raised_amount_usd),"missing","available")) %>%
+    group_by(raised_fund_available) %>%
+      count(funding_round_type, sort = TRUE) %>%
+        mutate(funding_round_type = fct_reorder(funding_round_type, n)) %>%
+          ggplot(aes( funding_round_type,  n)) + geom_col(aes(fill = raised_fund_available)) + coord_flip() + theme_light() 
+
+rounds2 %>% 
+  mutate(raised_fund_available = if_else(is.na(raised_amount_usd),"missing","available")) %>%
+    group_by(raised_fund_available) %>%
+      count(funding_round_type, sort = TRUE) %>%
+        mutate(funding_round_type = fct_reorder(funding_round_type, n)) %>%
+          ggplot(aes( funding_round_type,  n)) + geom_col(aes(fill = raised_fund_available),
+          position = "fill") + coord_flip() + theme_light() 
+
+##lets explore if missingness  has any relationship with with Date of funding
+rounds2 %>% 
+  mutate(fund_missing = if_else(is.na(raised_amount_usd),"missing","available"), 
+  fund_year = as.factor(year(funded_at))) %>%
+    count(fund_missing, fund_year, sort = TRUE) %>%
+      mutate(fund_year = fct_reorder(fund_year, n)) %>% filter( n > 15) %>% 
+        ggplot(aes(fund_year,  n)) + geom_col(aes(fill = fund_missing)) + coord_flip() + theme_light()
+
+#change to lower case to adddress duplicate counting 
+rounds2$company_permalink <- tolower(stringi::stri_trans_general(rounds2$company_permalink, "latin-ascii"))
+
+#head(rounds2)
+```
+
+## EDA and preprocessing on companies
+
+
+```{r}
+dim(companies)
+head(companies)
+tail(companies)
+DataExplorer::plot_intro(companies)
+DataExplorer::plot_missing(companies)
+summary(companies)
+mapply(length, mapply(unique, companies))
+
+companies[, c("status", "country_code", "state_code", "region", "city")] <- data.frame(mapply(as.factor, companies[, c("status", "country_code", "state_code", "region", "city")]))
+index <- setdiff(which(is.na(dmy(companies$founded_at))), which(is.na(companies$founded_at)))
+temp_date <- ymd(companies$founded_at[index])
+companies$founded_at <- dmy(companies$founded_at)
+companies$founded_at[index] <- temp_date
+temp_date <- NULL
+index <- NULL
+companies$permalink <- tolower(stri_trans_general(companies$permalink, "latin-ascii"))
+summary(rounds2)
+summary(companies)
+```
+
+## Preprocessing summary of the datasets.
+
+
+funding_round_type and funding_round_code c converted to factors. maount_raised_usd converted to numeric. funded_at ocnverted to dates. 70% of funding_round_code missing hence dropped. 17% of amount raised value is issing. In funding type undiscolosed, equity crowd funding, non_equity_assistance majority of amount raised data is missing. Missingnes of USD raised amount looks independent of Years of investment. The company+permalink  column contained non english characters which were converted to standard ASCI. It was then lower cased to avoid treatment of same company as differnt companies due to difference in cases.
+
+In companies dataset, "status", "country_code", "state_code", "region", "city" were converted to factors.  founded_at converted to dates. companies_permalink was treated for encoding issues and then lower cased to avoid distinction between same companies based on cases.
+
+
+## Checkpoint 1:Data Cleaning 1
+
+#How many unique companies are present in rounds2?
+
+```{r}
+
+length(unique(tolower(rounds2$company_permalink)))
+```
+
+#How many unique companies are present in companies?
+```{r}
+length(unique(tolower(companies$permalink)))
+
+```
+
+
+#In the companies data frame, which column can be used as the unique key for each company? Write the name of the column.
+
+```{r}
+
+length(unique(tolower(companies$name)))
+length(tolower(companies$name))
+nrow(companies)
+which(lapply(lapply(companies, unique), length) == nrow(companies))
+```
+
+#Are there any companies in the rounds2 file which are not present in companies?
+
+```{r}
+length(setdiff(rounds2$company_permalink, companies$permalink)) > 0
+
+```
+
+#Merge the two data frames so that all variables (columns) in the companies frame are added to the rounds2 data frame. Name the merged frame master_frame.
+
+```{r}
+master_frame <- rounds2 %>%
+                  inner_join(companies, by = c("company_permalink" = "permalink"))
+```
+
+#Exploring missing values
+```{r}
+DataExplorer::plot_missing(master_frame)
+
+DataExplorer::profile_missing(master_frame)
+
+#lets check if country_code can be found out by rows which have related values like region and city
+
+master_frame %>% filter(is.na(country_code)) %>% summarise(sum(raised_amount_usd, na.rm = TRUE))/sum(master_frame$raised_amount_usd, na.rm = TRUE) 
+
+master_frame %>% filter(is.na(country_code)) %>% summarise(mean(raised_amount_usd, na.rm = TRUE))
+
+
+                                                      
+```
+
+
+
+
+## Checkpoint 2: Funding Type Analysis
+
+
+```{r}
+
+#Average funding amount for type of funding
+master_frame %>% filter(!is.na(country_code)) %>% 
+    group_by(funding_round_type) %>% 
+      summarise(avg_fund_raised = mean(raised_amount_usd, na.rm=TRUE)) %>%
+        mutate(funding_round_type = fct_reorder(funding_round_type, abs(avg_fund_raised))) %>%
+          ggplot(aes(x= funding_round_type, y = avg_fund_raised)) + geom_col() + coord_flip()
+
+master_frame %>% filter(!is.na(country_code)) %>% 
+    group_by(funding_round_type) %>% 
+      summarise(avg_fund_raised = mean(raised_amount_usd, na.rm=TRUE), length(raised_amount_usd)) %>%
+        arrange(desc(avg_fund_raised)) %>% print( n = Inf)
+
+```
+
+
+## Checkpoint 3: Country Anlaysis
+
+
+```{r}
+
+top9 <- master_frame %>% filter(!is.na(country_code)) %>% 
+          filter(funding_round_type == "venture") %>%
+            group_by(country_code) %>% 
+              summarise(total_investemnt = round(sum(raised_amount_usd, na.rm = TRUE), 2)) %>%
+                arrange(desc(total_investemnt)) %>%
+                  head(9)
+top9
+```
+
+
+## Checkpoint 4: Sector Analysis
+
+
+```{r}
+
+#extracting primary sector
+master_frame$primary_sector <- stringr::word(master_frame$category_list,1,sep = "\\|")
+
+#reading the mapping file
+sector_map <- read_csv("C:/Users/Rabi/Documents/Data_Science/upgrad/investment_case_study/mapping.csv")
+
+#converting sector mapping from matrix to tabular dataframe
+sector_map_tabular <- sector_map %>% 
+                        gather(key = "main_sector", value = "flag",  -category_list) %>% 
+                          filter(flag == 1) %>% select(-flag)
+#mapping main sector
+master_frame <- 
+  master_frame %>% 
+    left_join(sector_map_tabular, by = c("primary_sector" = "category_list")) 
+
+#function to get country specific dataframe of preffred type and investment range.
+get_country_df <- function(c_code) {
+  rel_frames <- master_frame %>%
+                  filter(
+                  country_code == c_code,
+                  funding_round_type == "venture",
+                  between(raised_amount_usd, 5, 15)
+                  )
+  
+  sector_metrics <- rel_frames %>%
+                      group_by(main_sector) %>%
+                        summarise(
+                        total_no_investment_main_sec = length(main_sector),
+                        total_usd_investment_main_sec = sum(raised_amount_usd, na.rm = TRUE)
+                        )
+  
+  country_df <- rel_frames %>%
+                  inner_join(sector_metrics, "main_sector")
+  
+  return(country_df)
+}
+
+#call function on 3 top english speaking countries
+tgt_countries <- lapply(c("USA", "GBR", "IND"), get_country_df)
+
+USA <- tgt_countries[[1]]
+GBR <- tgt_countries[[2]]
+IND <- tgt_countries[[3]]
+
+#get the metrics asked as per the assignment in a list
+get_metrics <- function(df){
+  
+  get_top_invest_usd_company <- function(sector, df){
+  
+    df %>% filter(!is.na(country_code)) %>% 
+      filter(main_sector == sector) %>% 
+        group_by(main_sector, company_permalink, name) %>% 
+          summarise(total_invest_company = sum(raised_amount_usd)) %>%
+            ungroup() %>%
+            arrange(desc(total_invest_company)) %>% 
+              head(1)
+}
+  
+  sector_metric <- list()
+  
+  sector_metric$total <- df %>% 
+     filter(!is.na(raised_amount_usd)) %>% 
+      select(raised_amount_usd) %>% summarise(inv_no = length(raised_amount_usd), inv_usd =
+      round(sum(raised_amount_usd ), 2))
+     
+        
+  
+  sector_metric$top3 <- df %>% filter(!is.na(raised_amount_usd)) %>%
+                          group_by(main_sector) %>% 
+                            summarise(inv_no = length(raised_amount_usd), inv_usd =
+                            round(sum(raised_amount_usd ), 2)) %>% 
+                              arrange(desc(inv_no)) %>% head(3)
+  
+  
+  #top1_sector <- (sector_metric$top3$main_sector[[1]])
+  #top2_sector <- (sector_metric$top3$main_sector[[2]])
+  
+  sector_metric$top_companies <- lapply(sector_metric$top3$main_sector, get_top_invest_usd_company, df)
+  return(sector_metric)
+}
+
+get_metrics(USA)
+get_metrics(GBR)
+get_metrics(IND)
+```
+
+# Plot 1
+
+A plot showing the fraction of total investments (globally) in venture, seed, and private equity, and the average amount of investment in each funding type. This chart should make it clear that a certain funding type (FT) is best suited for Spark Funds.
+
+
+```{r, echo=FALSE}
+master_frame  %>% filter(!is.na(country_code), !is.na(raised_amount_usd)) %>% 
+  group_by(funding_round_type) %>% 
+    summarise(total_inv = round(sum(raised_amount_usd, na.rm = TRUE), 2),
+    avg_inv = round(mean(raised_amount_usd, na.rm = TRUE), 2)) %>% 
+      mutate(prop_inv = round(total_inv/sum(total_inv), 2)) %>% 
+        arrange(desc(total_inv)) %>% mutate(fund_type = as.character(funding_round_type)) %>%
+          #grouping small investements as "rest"
+          mutate(fund_type = as.factor(if_else(prop_inv < .02 , "rest", fund_type))) %>%
+            ungroup %>% group_by(fund_type) %>% 
+              summarise(prop_inv = sum(prop_inv), avg_inv = sum(avg_inv)) %>% 
+                mutate(fund_type = fct_reorder(fund_type, prop_inv)) %>% 
+                ggplot(aes(y=prop_inv * 100, x = fund_type)) + geom_col(fill = "sky blue") + 
+                coord_flip() + theme_bw() + 
+                geom_text(aes(label=avg_inv), color = "red") + 
+                labs(x = "Funds", y = "Percentage of global investement", 
+                title = "Where the most funds go and ticket size(mn)") + 
+                ylim(0,100)
+          
+```
+
+
+# Plot 2
+
+
+A plot showing the top 9 countries against the total amount of investments of funding type FT. This should make the top 3 countries (Country 1, Country 2, and Country 3) very clear.
+
+
+```{r}
+
+ master_frame %>% filter(!is.na(country_code), !is.na(raised_amount_usd)) %>% 
+  filter(funding_round_type == "venture") %>%
+    group_by(country_code) %>% 
+      summarise(investment = round(sum(raised_amount_usd, na.rm = TRUE))) %>% 
+        ungroup %>% 
+          mutate(country = fct_lump(country_code, n = 9, w = investment)) %>% 
+            mutate(country = fct_reorder(country, investment)) %>% 
+              ggplot(aes(x = country, y = investment)) + geom_col(fill = "violetred2") + coord_flip() + theme_light() +  geom_text(aes(label=investment)) + labs(title = "Most funded countries for Venture funding")
+
+```
+
+
+# Plot 3
+
+A plot showing the number of investments in the top 3 sectors of the top 3 countries on one chart (for the chosen investment type FT).
+
+
+```{r}
+ 
+
+master_frame %>% filter(!is.na(country_code) , !is.na(raised_amount_usd)) %>%
+  filter(funding_round_type == "venture", country_code %in% c("USA", "GBR", "IND")) %>%
+    group_by(country_code, main_sector) %>%
+      summarise(investment = round(sum(raised_amount_usd, na.rm = TRUE), 2), 
+      count = length(main_sector)) %>% top_n(3, investment) %>%
+        ungroup() %>% arrange(country_code, count) %>% mutate(sector_index = row_number()) %>% 
+        ggplot(aes(x=  sector_index, y = count, fill = main_sector)) + geom_col() + 
+        facet_wrap(country_code ~., scales = "free") + theme(axis.text.x = element_blank())
+        
+```
+
+
+
+
+
+
