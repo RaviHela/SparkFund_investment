@@ -1,5 +1,4 @@
 # SparkFund_investment
-Upgrad project in pyhton
 This is Case Study which is part of Upgrads Post Grdautae program in Data Science. There are two datasetsm  companies and rounds2. These datasets are taken from crunchbase. The objective of the project is advise spark fund on
   1) which Countries it should invest in?,
   2) In which sector?,
